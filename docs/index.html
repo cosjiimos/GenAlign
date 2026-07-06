@@ -104,6 +104,7 @@
         <a href="#architecture" class="hover:text-accent-700">Architecture</a>
         <a href="#pipeline" class="hover:text-accent-700">Pipeline</a>
         <a href="#results" class="hover:text-accent-700">Results</a>
+        <a href="#study" class="hover:text-accent-700">User study</a>
         <a href="#video" class="hover:text-accent-700">Video</a>
       </div>
       <div class="flex items-center gap-3">
@@ -370,6 +371,137 @@
         <figure>
           <img src="./img/fig_A2.png" alt="Generation results" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
         </figure>
+      </div>
+    </div>
+
+    <!-- HBI efficiency -->
+    <div class="mt-14 bg-accent-50/60 border border-accent-200 rounded-2xl p-6 md:p-7">
+      <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2">Property-conditioned generation with a fraction of the context.</h3>
+      <p class="text-[14.5px] text-gray-700 leading-relaxed max-w-3xl mb-5">
+        The History-Based Injection (HBI) selection feeds the generator only the designer&rsquo;s most relevant bindings. It reaches <b>comparable CLIP similarity</b> to injecting the whole graph while using <b class="text-accent-700">7.2&times; fewer properties</b> &mdash; an 85.9% reduction (96.7 &rarr; 13.4 properties per generation).
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <div class="text-2xl font-extrabold text-accent-700">7.2&times;</div>
+          <div class="text-[12px] text-gray-500 mt-1 leading-snug">fewer properties injected</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <div class="text-2xl font-extrabold text-accent-700">85.9%</div>
+          <div class="text-[12px] text-gray-500 mt-1 leading-snug">reduction in context size</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <div class="text-2xl font-extrabold text-accent-700">0.318</div>
+          <div class="text-[12px] text-gray-500 mt-1 leading-snug">CLIP similarity (vs. 0.316 full graph, n.s.)</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <div class="text-2xl font-extrabold text-accent-700">13.4</div>
+          <div class="text-[12px] text-gray-500 mt-1 leading-snug">properties per generation</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== USER STUDY ============================== -->
+  <section id="study" class="section-anchor bg-gray-50 border-y border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 py-14">
+      <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">User study</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Twenty-four professional designers, two systems, within-subjects.</h2>
+      <p class="text-gray-500 text-[15px] mb-8 max-w-3xl">Designers (M = 5.4 yrs experience) completed furniture &amp; product tasks defined by <em>conflicting</em> attribute pairs &mdash; <span class="font-mono text-[13px]">minimal &times; playful</span>, <span class="font-mono text-[13px]">modern &times; sleek</span> &mdash; comparing <b>GenAlign</b> against a <b>Baseline</b> without VKG editing, in counterbalanced order.</p>
+
+      <!-- RQ cards -->
+      <div class="grid md:grid-cols-3 gap-5 mb-12">
+        <div class="border border-gray-200 bg-white rounded-xl p-5">
+          <div class="text-[11px] font-mono text-accent-600 mb-2">RQ1 &middot; Controllability</div>
+          <p class="text-[13.5px] text-gray-700 leading-relaxed mb-3">Decomposing abstract adjectives into segment&ndash;property bindings shifted interaction from guess-and-check prompting to systematic property editing. Perceived effectiveness rose sharply <b>(3.54 &rarr; 6.29, p&lt;.001)</b>.</p>
+          <div class="text-[12px] text-gray-500">Intent matching <b class="text-gray-800">3.21 &rarr; 6.31</b> &middot; frustration <b class="text-gray-800">3.38 &rarr; 1.44</b></div>
+        </div>
+        <div class="border border-gray-200 bg-white rounded-xl p-5">
+          <div class="text-[11px] font-mono text-accent-600 mb-2">RQ2 &middot; Personalization</div>
+          <p class="text-[13.5px] text-gray-700 leading-relaxed mb-3">A user-evolving VKG captured each designer&rsquo;s own meaning of an attribute. Total generations rose <b>2.84&times;</b> while saved images dropped <b>3.43&times;</b> &mdash; a <b>0.98</b> reuse rate shows a growing personal vocabulary, not stockpiled examples.</p>
+          <div class="text-[12px] text-gray-500">Generation-to-save ratio <b class="text-gray-800">0.25 &rarr; 0.59 (2.35&times;)</b></div>
+        </div>
+        <div class="border border-gray-200 bg-white rounded-xl p-5">
+          <div class="text-[11px] font-mono text-accent-600 mb-2">RQ3 &middot; Semantic stability</div>
+          <p class="text-[13.5px] text-gray-700 leading-relaxed mb-3">Explicit bindings act as stable anchors, so intent doesn&rsquo;t drift turn to turn. Per-step semantic drift fell <b>22&times; (0.67 &rarr; 0.03)</b> and graph rewiring <b>11&times;</b> &mdash; yet overall diversity <em>increased</em>.</p>
+          <div class="text-[12px] text-gray-500">First-to-final drift unchanged &mdash; not a narrower search, a steadier path.</div>
+        </div>
+      </div>
+
+      <!-- Behavioral shift figure -->
+      <figure class="mb-12">
+        <img src="./img/fig_9.png" alt="Comparison of log-based and VKG-based metrics between Baseline and GenAlign" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+        <figcaption class="mt-2 text-gray-500 text-[11px] leading-relaxed text-center">
+          <b>Figure 9.</b> (a) Log-based metrics &mdash; prompt count, saved images, ratio, total generations &middot; (b) VKG-based metrics &mdash; triple/property dynamics, reuse, semantic drift, and graph change rate, Baseline vs. GenAlign.
+        </figcaption>
+      </figure>
+
+      <!-- Survey results table -->
+      <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Survey results.</h3>
+      <p class="text-gray-500 text-[14px] mb-5 max-w-2xl">Post-task ratings (7-point scale; CSI on a 10-point scale) across all 24 participants. GenAlign leads on every quality item, with lower frustration.</p>
+      <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white mb-3">
+        <table class="w-full text-[13.5px]">
+          <thead>
+            <tr class="border-b border-gray-200 text-gray-500">
+              <th class="text-left font-medium px-4 py-3">Item</th>
+              <th class="text-right font-medium px-4 py-3">Baseline</th>
+              <th class="text-right font-medium px-4 py-3 text-accent-700">GenAlign</th>
+              <th class="text-right font-medium px-4 py-3">p</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr><td class="px-4 py-2.5">Freely express design intentions (Q1)</td><td class="px-4 py-2.5 text-right font-mono text-gray-500">3.33</td><td class="px-4 py-2.5 text-right font-mono font-semibold text-accent-700">6.31</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">&lt;.001</td></tr>
+            <tr><td class="px-4 py-2.5">System understood my intentions (Q3)</td><td class="px-4 py-2.5 text-right font-mono text-gray-500">3.42</td><td class="px-4 py-2.5 text-right font-mono font-semibold text-accent-700">6.15</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">&lt;.001</td></tr>
+            <tr><td class="px-4 py-2.5">Performance (NASA-TLX, Q8)</td><td class="px-4 py-2.5 text-right font-mono text-gray-500">3.54</td><td class="px-4 py-2.5 text-right font-mono font-semibold text-accent-700">6.00</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">&lt;.001</td></tr>
+            <tr><td class="px-4 py-2.5">Frustration (NASA-TLX, Q10) &middot; lower is better</td><td class="px-4 py-2.5 text-right font-mono text-gray-500">3.38</td><td class="px-4 py-2.5 text-right font-mono font-semibold text-accent-700">1.44</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">.003</td></tr>
+            <tr><td class="px-4 py-2.5">Satisfied with results (Q11)</td><td class="px-4 py-2.5 text-right font-mono text-gray-500">3.88</td><td class="px-4 py-2.5 text-right font-mono font-semibold text-accent-700">6.42</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">&lt;.001</td></tr>
+            <tr><td class="px-4 py-2.5">Results are diverse (Q13)</td><td class="px-4 py-2.5 text-right font-mono text-gray-500">4.50</td><td class="px-4 py-2.5 text-right font-mono font-semibold text-accent-700">6.44</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">&lt;.001</td></tr>
+            <tr><td class="px-4 py-2.5">Results are creative (Q14)</td><td class="px-4 py-2.5 text-right font-mono text-gray-500">3.38</td><td class="px-4 py-2.5 text-right font-mono font-semibold text-accent-700">6.29</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">&lt;.001</td></tr>
+            <tr><td class="px-4 py-2.5">Understood attributes &amp; connections (Q18)</td><td class="px-4 py-2.5 text-right font-mono text-gray-500">2.71</td><td class="px-4 py-2.5 text-right font-mono font-semibold text-accent-700">6.46</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">&lt;.001</td></tr>
+            <tr class="bg-accent-50/40"><td class="px-4 py-2.5 font-semibold">Enjoyment (CSI, Q23) &middot; /10</td><td class="px-4 py-2.5 text-right font-mono text-gray-600">5.56</td><td class="px-4 py-2.5 text-right font-mono font-bold text-accent-700">9.39</td><td class="px-4 py-2.5 text-right font-mono text-gray-400">&lt;.001</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-[12px] text-gray-500 mb-12">Values are means (n = 24). Significance after Holm&ndash;Bonferroni correction; Wilcoxon signed-rank except where a paired t-test applied. The largest gap is on <b>understanding attributes and their connections (+3.75)</b> &mdash; the structure itself, not just the outputs.</p>
+
+      <!-- Case study figures -->
+      <div class="grid gap-8 mb-12">
+        <figure>
+          <img src="./img/fig_11.png" alt="Case P6: minimal x playful lamp, role-splitting strategy through saved segment properties" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+          <figcaption class="mt-2 text-gray-500 text-[11px] leading-relaxed text-center">
+            <b>Case (P6).</b> Designing a &ldquo;minimal &times; playful&rdquo; lamp, the designer split the two attributes across roles &mdash; <em>minimal</em> as geometry, <em>playful</em> as color &mdash; a strategy that surfaced from inspecting saved segment&ndash;property bindings, not from re-prompting.
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="./img/fig_12.png" alt="Case P8: modern x sleek sofa, connecting attributes via property transfer across segments" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+          <figcaption class="mt-2 text-gray-500 text-[11px] leading-relaxed text-center">
+            <b>Case (P8).</b> A &ldquo;modern &times; sleek&rdquo; sofa built by <em>transferring</em> properties across segments &mdash; a &ldquo;thin metal&rdquo; support not found in <span class="font-mono text-[11px]">sofa</span> was retrieved from a saved <span class="font-mono text-[11px]">table</span>, then carried into the design.
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Interview quotes -->
+      <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">What the designers said</h3>
+      <p class="text-gray-500 text-[14px] mb-7 max-w-2xl">Semi-structured interviews surfaced <em>why</em> the numbers moved &mdash; the relief of editing one wrong property instead of re-prompting, and seeing the system&rsquo;s interpretation made visible.</p>
+      <div class="grid md:grid-cols-3 gap-5">
+        <blockquote class="bg-white border border-gray-200 rounded-2xl p-5">
+          <p class="text-[14px] text-gray-800 leading-relaxed mb-3">&ldquo;In Baseline, I kept rephrasing prompts hoping the AI would guess my intent. With GenAlign, I could just adjust the specific property that was wrong.&rdquo;</p>
+          <footer class="text-[12px] text-accent-700 font-medium">P14 &middot; on controllability</footer>
+        </blockquote>
+        <blockquote class="bg-white border border-gray-200 rounded-2xl p-5">
+          <p class="text-[14px] text-gray-800 leading-relaxed mb-3">&ldquo;Baseline gave me random surprises &mdash; sometimes good, often frustrating. GenAlign gave me intentional variations &mdash; I knew why each output was different.&rdquo;</p>
+          <footer class="text-[12px] text-accent-700 font-medium">P9 &middot; on controlled exploration</footer>
+        </blockquote>
+        <blockquote class="bg-white border border-gray-200 rounded-2xl p-5">
+          <p class="text-[14px] text-gray-800 leading-relaxed mb-3">Designing a &ldquo;minimal &times; playful&rdquo; lamp, P6 discovered role-splitting &mdash; minimal as geometry, playful as color &mdash; not by prompting, but by <em>inspecting saved segment properties</em>.</p>
+          <footer class="text-[12px] text-accent-700 font-medium">P6 &middot; on making interpretation visible</footer>
+        </blockquote>
+      </div>
+
+      <!-- Closing takeaway -->
+      <div class="mt-8 bg-accent-50/60 border border-accent-200 rounded-2xl p-6 md:p-7">
+        <p class="text-[15px] md:text-[16px] text-gray-800 leading-relaxed">
+          The takeaway isn&rsquo;t that GenAlign generates <em>better</em> images &mdash; CLIP similarity is comparable to injecting the whole graph. It&rsquo;s that GenAlign makes intent <b class="text-accent-700">explicit, traceable, and stable</b>. By externalizing abstract adjectives as inspectable segment&ndash;property bindings, it lets designers build a reusable design vocabulary and explore along dimensions <em>they</em> chose &mdash; turning random variation into controlled, personalized exploration.
+        </p>
       </div>
     </div>
   </section>
