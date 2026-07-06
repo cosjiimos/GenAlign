@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Multimodal AI pipeline for extracting structured Visual Knowledge Graphs from product images using Semantic-SAM and GPT-4o">
+  <meta name="keywords" content="GenAlign, Visual Knowledge Graph, Semantic-SAM, GPT-4o, Knowledge Extraction">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    GenAlign
+  </title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://github.com/cosjiimos">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Projects
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://cosjiimos.github.io/GenPara3D/">
+              GenPara3D
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">GenAlign</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://cosjiimos.github.io/">Jiin Choi</a><sup>1,2</sup>,</span>
+              <span class="author-block">
+                Minkyung Seo<sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://designinformatics.hanyang.ac.kr/People_Kyung-Hoon-Hyun">Kyung Hoon Hyun</a><sup>1,2</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Hanyang University ,</span>
+              <span class="author-block"><sup>2</sup>Human-Centered AI Design Institute</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link (disabled) -->
+                <span class="link-block">
+                  <a class="external-link button is-normal is-rounded is-dark" disabled style="pointer-events: none; opacity: 0.5;">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- Video Link -->
+                <span class="link-block">
+                  <a href="#video"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-video"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span>
+                <!-- Code Link -->
+                <span class="link-block">
+                  <a href="https://github.com/cosjiimos/GenAlign"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img src="./img/overview.png" alt="GenAlign System Overview" style="width:100%;">
+        <h2 class="subtitle has-text-centered">
+          <span class="dnerf">GenAlign</span> - An end-to-end multimodal AI system that resolves semantic disambiguation through Visual Knowledge Graph extraction, enabling precise property-based design editing and generation.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 section-title">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              GenAlign addresses the challenge of semantic ambiguity in design generation by extracting structured Visual Knowledge Graphs from product images. The system enables precise property-based editing and generation through fine-grained semantic understanding of design elements, supporting applications in e-commerce, design automation, and creative workflows.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+
+  <section class="section">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <div class="container is-max-desktop">
+
+      <div class="columns is-centered">
+
+        <div class="column is-full-width">
+          <h2 class="title is-3 section-title">System Overview</h2>
+          <figure class="image" style="margin-top: 1.5rem; margin-bottom: 4rem;">
+            <img src="./img/fig_2.png" alt="System Overview">
+          </figure>
+
+          <h2 class="title is-3 section-title">Key Features</h2>
+          <figure class="image" style="margin-top: 1.5rem; margin-bottom: 2rem;">
+            <img src="./img/fig_5.png" alt="Key Features">
+          </figure>
+          <div class="content has-text-justified">
+            <ul>
+              <li>
+                <strong>Semantic Segmentation:</strong> Automatic part-level segmentation using Semantic-SAM with Swin-L Transformer backbone for precise boundary detection.
+              </li>
+              <li>
+                <strong>GPT-4o Vision:</strong> AI-powered segment labeling and attribute extraction (color, material, style, relationships) using multimodal GPT-4o.
+              </li>
+              <li>
+                <strong>Knowledge Graph:</strong> Structured triple extraction with VisualSem ontology: 13 standard relations + 1 custom "is-style-of" relation.
+              </li>
+              <li>
+                <strong>Background Removal:</strong> Intelligent background removal using rembg (ISNet model) for cleaner segmentation results.
+              </li>
+              <li>
+                <strong>Semantic Search:</strong> CLIP-based image embedding with FAISS indexing for fast similarity search and retrieval.
+              </li>
+              <li>
+                <strong>REST API:</strong> Production-ready Flask API with 6 endpoints for segmentation, labeling, triple extraction, and image generation.
+              </li>
+            </ul>
+          </div>
+
+          <h2 class="title is-3 section-title" style="margin-top: 3rem;">Property Editor</h2>
+          <figure class="image" style="margin-top: 1.5rem; margin-bottom: 4rem;">
+            <img src="./img/fig_3.png" alt="Property Editor Interface">
+          </figure>
+
+          <h2 class="title is-3 section-title" style="margin-top: 3rem;">Technical Pipeline</h2>
+          <figure class="image" style="margin-top: 1.5rem; margin-bottom: 4rem;">
+            <img src="./img/fig_A1.png" alt="Technical Pipeline">
+          </figure>
+
+          <h2 class="title is-3 section-title" style="margin-top: 3rem;">Visual Knowledge Graph Extraction</h2>
+          <figure class="image" style="margin-top: 1.5rem; margin-bottom: 4rem;">
+            <img src="./img/fig_7.png" alt="VKG Extraction Example">
+          </figure>
+
+          <h2 class="title is-3 section-title" style="margin-top: 3rem;">HBI Extraction and Image Generation</h2>
+          <figure class="image" style="margin-top: 1.5rem; margin-bottom: 4rem;">
+            <img src="./img/fig_hbi.png" alt="HBI Extraction and Generation">
+          </figure>
+
+          <h2 class="title is-3 section-title" style="margin-top: 3rem;">Example Results</h2>
+          <figure class="image" style="margin-top: 1.5rem; margin-bottom: 4rem;">
+            <img src="./img/fig_A2.png" alt="Example Results">
+          </figure>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Section -->
+  <section class="section section-alt" id="video">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 section-title has-text-centered">Video</h2>
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <!-- YouTube 비디오를 추가하려면 아래 주석을 해제하고 YOUR_VIDEO_ID를 실제 ID로 변경하세요 -->
+          <!-- 예: https://www.youtube.com/watch?v=dQw4w9WgXcQ 라면 YOUR_VIDEO_ID = dQw4w9WgXcQ -->
+          <!--
+          <div class="publication-video">
+            <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+          </div>
+          -->
+
+          <!-- 임시 메시지 (비디오 추가 시 삭제) -->
+          <div class="content has-text-centered">
+            <p style="font-size: 1.1rem; color: #6b21a8;">
+              Demo video coming soon.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="https://github.com/cosjiimos/GenAlign">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              This means you are free to borrow the <a href="https://github.com/nerfies/nerfies.github.io">source
+                code</a> of this website,
+              we just ask that you link back to this page in the footer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

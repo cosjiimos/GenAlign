@@ -92,8 +92,8 @@ htmlcov/
 docs/_build/
 site/
 
-# Project page (GitHub Pages) — not tracked in this repo
-docs/
+# Uncompressed source gif for the teaser (compressed to docs/img/teaser.gif)
+docs/img/video_Sub_01_1*.gif
 
 # OS
 Thumbs.db
