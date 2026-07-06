@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <!-- Google tag (gtag.js) -->
@@ -8,404 +8,445 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-JMC2BQES9B');
   </script>
 
-  <meta charset="utf-8">
-  <meta name="robots" content="noindex, nofollow">
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GenAlign &mdash; Visual Knowledge Graph Extraction for Design Generation</title>
   <meta name="description"
-    content="Multimodal AI pipeline for extracting structured Visual Knowledge Graphs from product images using Semantic-SAM and GPT-4o">
-  <meta name="keywords" content="GenAlign, Visual Knowledge Graph, Semantic-SAM, GPT-4o, Knowledge Extraction">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GenAlign</title>
+    content="GenAlign addresses semantic ambiguity in design generation by extracting structured Visual Knowledge Graphs from product images using Semantic-SAM segmentation and GPT-4o vision." />
+  <meta name="keywords" content="GenAlign, Visual Knowledge Graph, Semantic-SAM, GPT-4o, Knowledge Extraction" />
+  <meta property="og:title" content="GenAlign: Visual Knowledge Graph Extraction for Design Generation" />
+  <meta property="og:description" content="A multimodal AI pipeline that extracts structured Visual Knowledge Graphs from product images, enabling precise property-based editing and generation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cosjiimos.github.io/GenAlign/" />
+  <meta property="og:image" content="https://cosjiimos.github.io/GenAlign/img/overview.png" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%A7%A9</text></svg>" />
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,500;0,600;1,500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+            serif: ['Lora', 'ui-serif', 'Georgia', 'serif'],
+          },
+          colors: {
+            /* Warm terracotta accent, sampled from the paper figures */
+            accent: {
+              50:  '#fbf4ee',
+              100: '#f6e6da',
+              200: '#edc9b1',
+              300: '#e0a784',
+              400: '#cf7f54',
+              500: '#bd6336',
+              600: '#a64f29',
+              700: '#883f23',
+              800: '#6e3420',
+              900: '#5a2d1d',
+            },
+            /* Soft sage/olive used for secondary accents */
+            sage: {
+              100: '#e8efe2',
+              300: '#a9c096',
+              500: '#7c9b5e',
+              700: '#5a7642',
+            },
+          },
+        },
+      },
+    };
+  </script>
 
   <style>
-    /* Additional styling for rich content */
-    .overview-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin: 2rem 0;
-      max-width: 100%;
-    }
+    html { scroll-behavior: smooth; }
+    body { font-feature-settings: 'cv11', 'ss01', 'ss03'; }
+    .brand { letter-spacing: -0.01em; }
+    .section-anchor { scroll-margin-top: 4rem; }
+    code.inline { background: rgb(243 244 246); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.92em; }
 
-    @media (max-width: 1024px) {
-      .overview-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+    .results-tab, button:not(:disabled) { cursor: pointer; }
 
-    @media (max-width: 640px) {
-      .overview-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    /* Overview / stage cards */
+    .stage-card { transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease; }
+    .stage-card:hover { border-color: rgb(207 127 84); box-shadow: 0 6px 22px -12px rgba(110,52,32,0.45); transform: translateY(-2px); }
 
-    .overview-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      border: 2px solid var(--accent-purple);
-      transition: all 0.3s ease;
-      position: relative;
-    }
+    /* Pipeline step rows */
+    .pipeline-step { transition: border-color 140ms ease, box-shadow 140ms ease, padding-left 140ms ease, transform 140ms ease; }
+    .pipeline-step:hover { border-color: rgb(207 127 84); box-shadow: 0 6px 22px -14px rgba(110,52,32,0.5); transform: translateY(-1px); }
 
-    .overview-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(109, 40, 217, 0.25);
-      border-color: var(--primary-purple);
-    }
-
-    .overview-card-icon {
-      font-size: 1.8rem;
-      color: var(--primary-purple);
-      margin-bottom: 0.75rem;
-    }
-
-    .overview-card h3 {
-      color: var(--dark-purple);
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .overview-card p {
-      color: #4a5568;
-      line-height: 1.6;
-      font-size: 0.9rem;
-    }
-
-    .pipeline-step {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      border-left: 4px solid var(--primary-purple);
-      margin-bottom: 1.5rem;
-      box-shadow: 0 2px 12px rgba(109, 40, 217, 0.15);
-      transition: all 0.3s ease;
-    }
-
-    .pipeline-step:hover {
-      border-left-width: 8px;
-      padding-left: 2.5rem;
-      box-shadow: 0 6px 20px rgba(109, 40, 217, 0.25);
-      transform: translateY(-2px);
-    }
-
-    .pipeline-step h4 {
-      color: var(--dark-purple);
-      font-weight: 700;
-      font-size: 1.2rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .pipeline-number {
-      display: inline-block;
-      background: var(--primary-purple);
-      color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 32px;
-      font-weight: bold;
-      margin-right: 0.75rem;
-    }
-
-    .feature-highlight {
-      background: var(--accent-purple);
-      padding: 0.25rem 0.75rem;
-      border-radius: 6px;
-      font-weight: 600;
-      color: var(--dark-purple);
-    }
+    /* Figure zoom-on-click cursor hint */
+    .zoomable { cursor: zoom-in; }
   </style>
 </head>
 
-<body>
+<body class="bg-white text-gray-800 antialiased">
 
-  <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
+  <!-- ============================== STICKY NAV ============================== -->
+  <nav class="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-gray-100">
+    <div class="max-w-5xl mx-auto px-6 h-12 flex items-center justify-between text-[13px]">
+      <a href="#" class="font-bold tracking-tight text-gray-900 brand flex items-center gap-1.5">
+        <span class="text-accent-600">◧</span> GenAlign
       </a>
-    </div>
-    <div class="navbar-menu">
-      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-        <a class="navbar-item" href="https://github.com/cosjiimos">
-          <span class="icon"><i class="fas fa-home"></i></span>
-        </a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">More Projects</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="https://cosjiimos.github.io/GenPara3D/">GenPara3D</a>
+      <div class="hidden md:flex items-center gap-5 text-gray-600">
+        <a href="#abstract" class="hover:text-accent-700">Abstract</a>
+        <a href="#overview" class="hover:text-accent-700">Overview</a>
+        <a href="#architecture" class="hover:text-accent-700">Architecture</a>
+        <a href="#pipeline" class="hover:text-accent-700">Pipeline</a>
+        <a href="#results" class="hover:text-accent-700">Results</a>
+        <a href="#video" class="hover:text-accent-700">Video</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- Related projects dropdown -->
+        <div class="relative" id="related-wrap">
+          <button id="related-btn" type="button" aria-expanded="false"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:border-accent-300 hover:text-accent-700 transition text-[12.5px] font-medium">
+            Related projects
+            <svg class="w-3 h-3 transition-transform" id="related-caret" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="related-menu" class="hidden absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-lg p-1.5 z-50">
+            <a href="https://cosjiimos.github.io/GenPara3D/" target="_blank" rel="noopener"
+               class="block px-3 py-2.5 rounded-lg hover:bg-accent-50 transition group">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-gray-900 text-[13px] group-hover:text-accent-700">GenPara3D</span>
+                <svg class="w-3.5 h-3.5 text-gray-300 group-hover:text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-[11.5px] text-gray-500 leading-snug mt-0.5">Generative parametric 3D project page</p>
+            </a>
+            <a href="https://cosjiimos.github.io/" target="_blank" rel="noopener"
+               class="block px-3 py-2.5 rounded-lg hover:bg-accent-50 transition group">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-gray-900 text-[13px] group-hover:text-accent-700">More research</span>
+                <svg class="w-3.5 h-3.5 text-gray-300 group-hover:text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-[11.5px] text-gray-500 leading-snug mt-0.5">cosjiimos.github.io</p>
+            </a>
           </div>
         </div>
+        <a href="https://github.com/cosjiimos/GenAlign" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-900" aria-label="GitHub">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.07.78 2.16v3.2c0 .31.21.68.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
+        </a>
       </div>
     </div>
   </nav>
 
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered">
-          <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">GenAlign</h1>
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <a href="https://cosjiimos.github.io/">Jiin Choi</a><sup>1,2</sup>,</span>
-              <span class="author-block">Minkyung Seo<sup>1</sup>,</span>
-              <span class="author-block">
-                <a href="https://designinformatics.hanyang.ac.kr/People_Kyung-Hoon-Hyun">Kyung Hoon Hyun</a><sup>1,2,*</sup>
-              </span>
-            </div>
-            <div class="is-size-5 publication-authors">
-              <span class="author-block"><sup>1</sup>Design Informatics Lab, Interior Architecture Design, Hanyang University, Seoul, Republic of Korea</span>
-            </div>
-            <div class="is-size-5 publication-authors">
-              <span class="author-block"><sup>2</sup>Human-Centered AI Design Institute, Hanyang University, Seoul, Republic of Korea</span>
-            </div>
-            <div class="is-size-6 publication-authors" style="margin-top: 0.5rem;">
-              <span class="author-block"><sup>*</sup>Corresponding author</span>
-            </div>
-            <div class="column has-text-centered">
-              <div class="publication-links">
-                <span class="link-block">
-                  <a class="external-link button is-normal is-rounded is-dark" disabled style="pointer-events: none; opacity: 0.5;">
-                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                    <span>Paper</span>
-                  </a>
-                </span>
-                <span class="link-block">
-                  <a href="#video" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon"><i class="fas fa-video"></i></span>
-                    <span>Video</span>
-                  </a>
-                </span>
-                <span class="link-block">
-                  <a href="https://github.com/cosjiimos/GenAlign" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon"><i class="fab fa-github"></i></span>
-                    <span>Code</span>
-                  </a>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- ============================== HERO ============================== -->
+  <header class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 bg-gradient-to-b from-accent-50/70 via-white to-white"></div>
 
-  <section class="hero teaser section-alt">
-    <div class="container is-max-desktop">
-      <div class="hero-body">
-        <img src="./img/overview.png" alt="GenAlign System Overview" style="width:100%;">
-        <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem;">
-          <span class="dnerf">GenAlign</span> addresses semantic ambiguity in design generation through Visual Knowledge Graph extraction, enabling precise property-based editing and generation.
-        </h2>
+    <div class="max-w-4xl mx-auto px-6 pt-12 pb-10 text-center">
+      <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-accent-100 text-accent-800 text-[12px] font-semibold tracking-wider uppercase mb-6">
+        Visual Knowledge Graph
       </div>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3 section-title">Abstract</h2>
-          <div class="content has-text-justified">
-            <p>
-              GenAlign addresses the challenge of semantic ambiguity in design generation by extracting structured Visual Knowledge Graphs from product images. The system enables precise property-based editing and generation through fine-grained semantic understanding of design elements, supporting applications in e-commerce, design automation, and creative workflows.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title has-text-centered">Overview</h2>
-      <p class="has-text-centered" style="font-size: 1.1rem; color: #4a5568; margin-bottom: 2rem;">
-        Four key innovations drive the GenAlign framework
+      <h1 class="font-sans text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900 mb-3 flex items-center justify-center gap-3">
+        <span class="text-accent-600">◧</span><span class="brand">GenAlign</span>
+      </h1>
+      <p class="text-lg md:text-2xl text-gray-700 mb-7 leading-tight max-w-2xl mx-auto" style="font-family:'Space Grotesk',ui-sans-serif,system-ui,sans-serif; font-weight:500; letter-spacing:-0.015em;">
+        Structured Visual Knowledge Graph Extraction for Design Generation
       </p>
 
-      <div class="overview-grid">
-        <div class="overview-card">
-          <div class="overview-card-icon"><i class="fas fa-cut"></i></div>
-          <h3>Semantic Segmentation</h3>
-          <p>
-            Multi-granularity part-level segmentation using <strong>Semantic-SAM</strong> with Swin-L Transformer, extracting precise object boundaries and hierarchical part structures for detailed analysis.
-          </p>
-        </div>
-
-        <div class="overview-card">
-          <div class="overview-card-icon"><i class="fas fa-tags"></i></div>
-          <h3>Property Extraction</h3>
-          <p>
-            <strong>GPT-4o Vision</strong> powered extraction of visual attributes including material, color, style, and relationships - transforming visual features into structured semantic properties.
-          </p>
-        </div>
-
-        <div class="overview-card">
-          <div class="overview-card-icon"><i class="fas fa-project-diagram"></i></div>
-          <h3>Knowledge Graph</h3>
-          <p>
-            Structured triple extraction following <strong>VisualSem ontology</strong> with 13 standard relations plus custom "is-style-of" relation, building a cognitive graph of design elements.
-          </p>
-        </div>
-
-        <div class="overview-card">
-          <div class="overview-card-icon"><i class="fas fa-magic"></i></div>
-          <h3>Property-based Generation</h3>
-          <p>
-            Generate and edit designs by <strong>transferring</strong> or <strong>modifying properties</strong> in the knowledge graph - enabling precise control over material, style, and form.
-          </p>
-        </div>
+      <div class="text-gray-700 mb-2 text-sm">
+        <a href="https://cosjiimos.github.io/" target="_blank" rel="noopener" class="hover:text-accent-700 underline-offset-2 hover:underline">Jiin Choi</a><sup class="text-gray-400">1,2</sup>,
+        Minkyung Seo<sup class="text-gray-400">1</sup>,
+        <a href="https://designinformatics.hanyang.ac.kr/People_Kyung-Hoon-Hyun" target="_blank" rel="noopener" class="hover:text-accent-700 underline-offset-2 hover:underline">Kyung Hoon Hyun</a><sup class="text-gray-400">1,2,*</sup>
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title has-text-centered">System Architecture</h2>
-      <figure class="image" style="margin: 2rem 0;">
-        <img src="./img/fig_2.png" alt="System Overview">
-      </figure>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title">Visual Knowledge Graph Interface</h2>
-      <figure class="image" style="margin: 2rem 0;">
-        <img src="./img/fig_5.png" alt="Interactive Knowledge Graph">
-      </figure>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title">Property Editor</h2>
-      <figure class="image" style="margin: 2rem 0;">
-        <img src="./img/fig_3.png" alt="Property Editor Interface">
-      </figure>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title">Technical Pipeline</h2>
-      <figure class="image" style="margin: 2rem 0 3rem 0;">
-        <img src="./img/fig_A1.png" alt="Technical Pipeline">
-      </figure>
-
-      <div class="pipeline-step">
-        <h4><span class="pipeline-number">1</span>Segmentation</h4>
-        <p>Multi-granularity part extraction using Semantic-SAM, producing hierarchical masks with object/part labels (e.g., "sofa-armrest", "table-leg").</p>
+      <div class="text-gray-500 text-[11px] leading-relaxed mb-1 max-w-2xl mx-auto">
+        <sup>1</sup>Design Informatics Lab, Interior Architecture Design, Hanyang University, Seoul, Republic of Korea<br/>
+        <sup>2</sup>Human-Centered AI Design Institute, Hanyang University, Seoul, Republic of Korea
+      </div>
+      <div class="text-gray-400 text-[11px] mb-7">
+        <sup>*</sup>Corresponding author
       </div>
 
-      <div class="pipeline-step">
-        <h4><span class="pipeline-number">2</span>Segment Labeling</h4>
-        <p>GPT-4o Vision analyzes each segment to assign semantic labels, understanding both the part identity and its role within the overall object.</p>
-      </div>
-
-      <div class="pipeline-step">
-        <h4><span class="pipeline-number">3</span>Visual Attribute Extraction</h4>
-        <p>Extract fine-grained properties including material (wood, metal, fabric), color, texture, shape characteristics, and functional attributes.</p>
-      </div>
-
-      <div class="pipeline-step">
-        <h4><span class="pipeline-number">4</span>Triple Extraction</h4>
-        <p>Build structured knowledge graph triples following VisualSem ontology: <code>is-a</code>, <code>part-of</code>, <code>made-of</code>, <code>has-property</code>, <code>is-style-of</code>, and more.</p>
-      </div>
-
-      <div class="pipeline-step">
-        <h4><span class="pipeline-number">5</span>Post-Processing</h4>
-        <p>Normalize properties, inject into cognitive graph, and save VKG logs for analysis and generation tasks.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title">Visual Knowledge Graph Extraction</h2>
-      <figure class="image" style="margin: 2rem 0;">
-        <img src="./img/fig_7.png" alt="VKG Extraction Process">
-      </figure>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title">HBI Extraction and Image Generation</h2>
-      <figure class="image" style="margin: 2rem 0;">
-        <img src="./img/fig_hbi.png" alt="HBI-based Generation">
-      </figure>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title">Example Results</h2>
-      <figure class="image" style="margin: 2rem 0;">
-        <img src="./img/fig_A2.png" alt="Generation Results">
-      </figure>
-    </div>
-  </section>
-
-  <section class="section" id="video">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 section-title has-text-centered">Video</h2>
-      <div class="columns is-centered">
-        <div class="column is-four-fifths">
-          <div class="content has-text-centered">
-            <p style="font-size: 1.1rem; color: #6b21a8;">
-              Demo video coming soon.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="content has-text-centered">
-        <a class="icon-link" href="https://github.com/cosjiimos/GenAlign">
-          <i class="fab fa-github"></i>
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <span aria-disabled="true" title="Coming soon"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-200 text-gray-400 text-[13px] font-medium cursor-not-allowed select-none">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Paper
+          <span class="text-[10px] uppercase tracking-wide bg-gray-300 text-gray-500 rounded px-1.5 py-0.5">soon</span>
+        </span>
+        <a href="#video"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-800 text-[13px] font-medium hover:border-gray-900 hover:text-gray-900 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          Video
+        </a>
+        <a href="https://github.com/cosjiimos/GenAlign" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-800 text-[13px] font-medium hover:border-gray-900 hover:text-gray-900 transition">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.07.78 2.16v3.2c0 .31.21.68.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
+          Code
         </a>
       </div>
-      <div class="columns is-centered">
-        <div class="column is-8">
-          <div class="content">
-            <p>
-              This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-            </p>
-            <p>
-              This means you are free to borrow the <a href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website, we just ask that you link back to this page in the footer.
-            </p>
+    </div>
+  </header>
+
+  <!-- ============================== TEASER ============================== -->
+  <section class="max-w-5xl mx-auto px-6 pb-10">
+    <figure>
+      <img src="./img/overview.png" loading="lazy" alt="GenAlign system overview" class="w-full block rounded-xl border border-gray-200 zoomable" />
+      <figcaption class="mt-3 text-gray-600 text-[15px] leading-relaxed text-center max-w-3xl mx-auto">
+        <b class="text-accent-700">GenAlign</b> addresses semantic ambiguity in design generation through Visual Knowledge Graph extraction, enabling precise property-based editing and generation.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============================== ABSTRACT ============================== -->
+  <section id="abstract" class="section-anchor bg-gray-50 border-y border-gray-100">
+    <div class="max-w-5xl mx-auto px-6 py-14">
+      <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">Abstract</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 leading-snug mb-4">
+        Resolving <em>semantic ambiguity</em> in design generation with structured visual knowledge.
+      </h2>
+      <p class="text-gray-600 text-[15px] leading-relaxed max-w-3xl">
+        GenAlign addresses the challenge of semantic ambiguity in design generation by extracting structured <b class="text-accent-700">Visual Knowledge Graphs</b> from product images. The system enables precise property-based editing and generation through fine-grained semantic understanding of design elements, supporting applications in e-commerce, design automation, and creative workflows.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================== OVERVIEW ============================== -->
+  <section id="overview" class="section-anchor max-w-6xl mx-auto px-6 py-14">
+    <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">Overview</p>
+    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Four key innovations drive the GenAlign framework.</h2>
+    <p class="text-gray-500 text-[15px] mb-8 max-w-2xl">From part-level segmentation to property-based generation, each stage sharpens the system&rsquo;s semantic grasp of a design.</p>
+
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="stage-card bg-white border border-gray-200 rounded-xl p-5">
+        <div class="w-9 h-9 rounded-lg bg-accent-100 text-accent-700 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"/></svg>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1.5">Semantic Segmentation</h3>
+        <p class="text-[13px] text-gray-600 leading-relaxed">Multi-granularity part-level segmentation using <b class="text-accent-700">Semantic-SAM</b> with Swin-L Transformer, extracting precise object boundaries and hierarchical part structures.</p>
+      </div>
+
+      <div class="stage-card bg-white border border-gray-200 rounded-xl p-5">
+        <div class="w-9 h-9 rounded-lg bg-accent-100 text-accent-700 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z"/></svg>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1.5">Property Extraction</h3>
+        <p class="text-[13px] text-gray-600 leading-relaxed"><b class="text-accent-700">GPT-4o Vision</b>-powered extraction of visual attributes &mdash; material, color, style, and relationships &mdash; transforming visual features into structured semantic properties.</p>
+      </div>
+
+      <div class="stage-card bg-white border border-gray-200 rounded-xl p-5">
+        <div class="w-9 h-9 rounded-lg bg-accent-100 text-accent-700 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1.5">Knowledge Graph</h3>
+        <p class="text-[13px] text-gray-600 leading-relaxed">Structured triple extraction following <b class="text-accent-700">VisualSem ontology</b> with 13 standard relations plus a custom &ldquo;is-style-of&rdquo; relation, building a cognitive graph of design elements.</p>
+      </div>
+
+      <div class="stage-card bg-white border border-gray-200 rounded-xl p-5">
+        <div class="w-9 h-9 rounded-lg bg-accent-100 text-accent-700 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1.5">Property-based Generation</h3>
+        <p class="text-[13px] text-gray-600 leading-relaxed">Generate and edit designs by <b class="text-accent-700">transferring</b> or <b class="text-accent-700">modifying properties</b> in the knowledge graph &mdash; enabling precise control over material, style, and form.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== ARCHITECTURE ============================== -->
+  <section id="architecture" class="section-anchor bg-gray-50 border-y border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 py-14">
+      <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">System architecture</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">From a single product image to a structured, editable graph.</h2>
+      <figure>
+        <img src="./img/fig_2.png" alt="GenAlign system architecture" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============================== INTERFACE ============================== -->
+  <section class="max-w-6xl mx-auto px-6 py-14">
+    <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">The interface</p>
+    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Visual Knowledge Graph interface.</h2>
+    <p class="text-gray-500 text-[15px] mb-8 max-w-2xl">Inspect the extracted graph and its typed relations directly over the source image.</p>
+    <figure>
+      <img src="./img/fig_5.png" alt="Interactive Visual Knowledge Graph interface" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+    </figure>
+
+    <div class="mt-12">
+      <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Property editor.</h3>
+      <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Edit any node&rsquo;s attributes and propagate the change through the design.</p>
+      <figure>
+        <img src="./img/fig_3.png" alt="Property editor interface" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============================== PIPELINE ============================== -->
+  <section id="pipeline" class="section-anchor bg-gray-50 border-y border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 py-14">
+      <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">The pipeline</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Five stages, from pixels to knowledge graph.</h2>
+      <p class="text-gray-500 text-[15px] mb-8 max-w-2xl">Each stage refines the semantic representation &mdash; segmentation, labeling, attribute extraction, triple construction, and post-processing.</p>
+
+      <figure class="mb-10">
+        <img src="./img/fig_A1.png" alt="GenAlign technical pipeline" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+      </figure>
+
+      <div class="space-y-4">
+        <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">1</div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Segmentation</h4>
+            <p class="text-[13.5px] text-gray-600 leading-relaxed">Multi-granularity part extraction using Semantic-SAM, producing hierarchical masks with object/part labels (e.g., <code class="inline">sofa-armrest</code>, <code class="inline">table-leg</code>).</p>
           </div>
         </div>
+        <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">2</div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Segment Labeling</h4>
+            <p class="text-[13.5px] text-gray-600 leading-relaxed">GPT-4o Vision analyzes each segment to assign semantic labels, understanding both the part identity and its role within the overall object.</p>
+          </div>
+        </div>
+        <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">3</div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Visual Attribute Extraction</h4>
+            <p class="text-[13.5px] text-gray-600 leading-relaxed">Extract fine-grained properties including material (wood, metal, fabric), color, texture, shape characteristics, and functional attributes.</p>
+          </div>
+        </div>
+        <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">4</div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Triple Extraction</h4>
+            <p class="text-[13.5px] text-gray-600 leading-relaxed">Build structured knowledge graph triples following VisualSem ontology: <code class="inline">is-a</code>, <code class="inline">part-of</code>, <code class="inline">made-of</code>, <code class="inline">has-property</code>, <code class="inline">is-style-of</code>, and more.</p>
+          </div>
+        </div>
+        <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">5</div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Post-Processing</h4>
+            <p class="text-[13.5px] text-gray-600 leading-relaxed">Normalize properties, inject into the cognitive graph, and save VKG logs for analysis and generation tasks.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== RESULTS ============================== -->
+  <section id="results" class="section-anchor max-w-6xl mx-auto px-6 py-14">
+    <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">Results</p>
+    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">Visual Knowledge Graph extraction &amp; generation.</h2>
+
+    <div class="space-y-14">
+      <div>
+        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Visual Knowledge Graph extraction.</h3>
+        <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">The full extraction process, from segmented parts to a densified graph of typed relations.</p>
+        <figure>
+          <img src="./img/fig_7.png" alt="Visual Knowledge Graph extraction process" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+        </figure>
+      </div>
+
+      <div>
+        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">HBI extraction and image generation.</h3>
+        <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Property-grounded generation and editing driven by the extracted knowledge graph.</p>
+        <figure>
+          <img src="./img/fig_hbi.png" alt="HBI-based extraction and image generation" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+        </figure>
+      </div>
+
+      <div>
+        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Example results.</h3>
+        <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Generated and edited designs produced by transferring and modifying graph properties.</p>
+        <figure>
+          <img src="./img/fig_A2.png" alt="Generation results" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== VIDEO ============================== -->
+  <section id="video" class="section-anchor bg-gray-50 border-y border-gray-100">
+    <div class="max-w-5xl mx-auto px-6 py-14 text-center">
+      <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">Video</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Demo</h2>
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-dashed border-accent-300 text-accent-700 text-[13.5px] font-medium">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        Demo video coming soon
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="border-t border-gray-100">
+    <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[12.5px] text-gray-500">
+      <span class="flex items-center gap-1.5"><span class="text-accent-600">◧</span> GenAlign</span>
+      <div class="text-center md:text-right leading-relaxed">
+        <a href="https://github.com/cosjiimos/GenAlign" target="_blank" rel="noopener" class="hover:text-gray-900">github.com/cosjiimos/GenAlign</a>
+        <p class="text-[11px] text-gray-400 mt-1">
+          Website licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" class="hover:text-gray-700 underline-offset-2 hover:underline">CC BY-SA 4.0</a>.
+          Template adapted from <a href="https://github.com/nerfies/nerfies.github.io" class="hover:text-gray-700 underline-offset-2 hover:underline">Nerfies</a>.
+        </p>
       </div>
     </div>
   </footer>
+
+  <!-- ============================== LIGHTBOX ============================== -->
+  <div id="lightbox" class="fixed inset-0 z-[100] bg-black/80 hidden items-center justify-center p-6 cursor-zoom-out">
+    <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full rounded-lg shadow-2xl" />
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // ====== Related projects dropdown ======
+      var relBtn   = document.getElementById('related-btn');
+      var relMenu  = document.getElementById('related-menu');
+      var relCaret = document.getElementById('related-caret');
+      var relWrap  = document.getElementById('related-wrap');
+      if (relBtn && relMenu) {
+        function closeRel() {
+          relMenu.classList.add('hidden');
+          relBtn.setAttribute('aria-expanded', 'false');
+          relCaret.style.transform = '';
+        }
+        relBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = relMenu.classList.toggle('hidden') === false;
+          relBtn.setAttribute('aria-expanded', String(open));
+          relCaret.style.transform = open ? 'rotate(180deg)' : '';
+        });
+        document.addEventListener('click', function (e) {
+          if (!relWrap.contains(e.target)) closeRel();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeRel();
+        });
+      }
+
+      // ====== Figure lightbox ======
+      var lightbox    = document.getElementById('lightbox');
+      var lightboxImg = document.getElementById('lightbox-img');
+      document.querySelectorAll('.zoomable').forEach(function (img) {
+        img.addEventListener('click', function () {
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt || '';
+          lightbox.classList.remove('hidden');
+          lightbox.classList.add('flex');
+        });
+      });
+      function closeLightbox() {
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        lightboxImg.src = '';
+      }
+      lightbox.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeLightbox();
+      });
+    });
+  </script>
 
 </body>
 
