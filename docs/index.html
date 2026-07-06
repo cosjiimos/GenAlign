@@ -199,12 +199,21 @@
     </div>
   </header>
 
-  <!-- ============================== TEASER ============================== -->
-  <section class="max-w-5xl mx-auto px-6 pb-10">
+  <!-- ============================== TL;DR ============================== -->
+  <section id="tldr" class="section-anchor max-w-5xl mx-auto px-6 py-12">
+    <div class="mb-8">
+      <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">TL;DR</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 leading-snug mb-4">
+        We ground design generation in <em>which concrete properties a designer means</em> by a word like &ldquo;modern&rdquo; &mdash; not a single guess from the model.
+      </h2>
+      <p class="text-gray-600 text-[15px] leading-relaxed">
+        Designers describe goals with ambiguous adjectives (&ldquo;<em>modern</em>&rdquo;, &ldquo;<em>minimal</em>&rdquo;), but a generative model must pick one interpretation among many &mdash; and it silently reinterprets from turn to turn, so intent <b>drifts</b>. <b class="text-accent-700">GenAlign</b> externalizes each abstract attribute as inspectable <b>segment&ndash;property bindings</b> in a personal <b>Visual Knowledge Graph (VKG)</b> that updates in real time. The bindings act as stable anchors, so <span class="font-mono text-[13px]">body&rarr;geometry&rarr;angular</span> means the same thing in turn 1 and turn 10 &mdash; turning guess-and-check prompting into systematic, personalized property editing.
+      </p>
+    </div>
     <figure>
-      <img src="./img/teaser_crop.gif" loading="lazy" alt="GenAlign teaser animation" class="w-full block rounded-xl border border-gray-200 zoomable" />
-      <figcaption class="mt-3 text-gray-600 text-[15px] leading-relaxed text-center max-w-3xl mx-auto">
-        <b class="text-accent-700">GenAlign</b> addresses semantic ambiguity in design generation through Visual Knowledge Graph extraction, enabling precise property-based editing and generation.
+      <img src="./img/teaser_crop.gif" loading="lazy" alt="GenAlign in action: segment-guided exploration, VKG-conditioned generation, and property editing." class="w-full block rounded-xl border border-gray-200 zoomable" />
+      <figcaption class="mt-2 text-gray-500 text-[11px] leading-relaxed text-center">
+        GenAlign in action &mdash; segment-guided exploration, a growing Visual Knowledge Graph, and property-conditioned generation that keeps intent aligned across iterations.
       </figcaption>
     </figure>
   </section>
