@@ -175,12 +175,12 @@
       pointer-events: none;
       opacity: 0; transition: opacity 140ms ease;
     }
-    .pe-overlay.is-shown { opacity: 1; }
+    .pe-overlay.is-shown { opacity: 1; }            /* selected segment */
+    .pe-overlay.is-preview { opacity: 0.55; }        /* hover preview */
     .pe-hit {
       position: absolute; cursor: pointer; background: transparent;
-      border: 0; padding: 0; border-radius: 8px;
+      border: 0; padding: 0;
     }
-    .pe-hit:hover { background: rgba(37,99,235,0.10); }
 
     /* Property pills: click to toggle-select */
     .pe-prop { cursor: pointer; transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease; }
@@ -888,8 +888,21 @@
         segTabs.querySelectorAll('.seg-tab').forEach(function (b) {
           b.addEventListener('click', function () { showSegment(b.getAttribute('data-part')); });
         });
+        function clearPreview() {
+          peOverlays.forEach(function (o) { o.classList.remove('is-preview'); });
+        }
         peHits.forEach(function (h) {
-          h.addEventListener('click', function () { showSegment(h.getAttribute('data-part')); });
+          var part = h.getAttribute('data-part');
+          h.addEventListener('mouseenter', function () {
+            clearPreview();
+            peOverlays.forEach(function (o) {
+              if (o.getAttribute('data-part') === part && !o.classList.contains('is-shown')) {
+                o.classList.add('is-preview');
+              }
+            });
+          });
+          h.addEventListener('mouseleave', clearPreview);
+          h.addEventListener('click', function () { clearPreview(); showSegment(part); });
         });
         showSegment('seat');
       }
