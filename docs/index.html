@@ -160,18 +160,9 @@
     .kg-edge { transition: opacity 180ms ease, stroke 180ms ease; }
     .kg-edge.is-lit { stroke: #7c9b5e; stroke-width: 2; stroke-dasharray: 0; }
 
-    /* Property-editor segment tabs & sofa hotspots */
+    /* Property-editor segment tabs */
     .seg-tab { cursor: pointer; transition: all 120ms ease; }
     .seg-tab.is-active { background: #9e6606; border-color: #9e6606; color: #fff; }
-    .pe-stage { position: relative; }
-    .pe-hotspot {
-      position: absolute; cursor: pointer;
-      border-radius: 10px;
-      background: rgba(59,130,246,0); border: 2px solid transparent;
-      transition: background 140ms ease, border-color 140ms ease;
-    }
-    .pe-hotspot:hover { background: rgba(59,130,246,0.16); border-color: rgba(37,99,235,0.5); }
-    .pe-hotspot.is-active { background: rgba(59,130,246,0.42); border-color: #2563eb; }
   </style>
 </head>
 
@@ -421,8 +412,12 @@
         <!-- style nodes (purple, blurred, floating) -->
         <span class="kg-node style floaty" data-style="minimal" style="--dur:6s; left:47%; top:46%; width:11%; aspect-ratio:1; font-size:15px;">minimal</span>
         <span class="kg-node style floaty" data-style="playful" style="--dur:6.5s; --delay:.4s; left:47%; top:72%; width:11%; aspect-ratio:1; font-size:15px;">playful</span>
-        <!-- arrow between the two styles (transfer) -->
-        <svg class="absolute" style="left:46.5%; top:56%; width:3%; height:16%; pointer-events:none;" viewBox="0 0 30 80"><circle cx="15" cy="66" r="6" fill="#111"/><line x1="15" y1="66" x2="15" y2="16" stroke="#111" stroke-width="2.5"/><polygon points="15,6 9,20 21,20" fill="#111"/></svg>
+        <!-- arrow between the two styles (transfer): playful -> minimal -->
+        <svg class="absolute" style="left:47%; top:53%; transform:translateX(-50%); width:26px; height:78px; pointer-events:none;" viewBox="0 0 26 78" preserveAspectRatio="xMidYMid meet">
+          <circle cx="13" cy="70" r="5.5" fill="#1f2937"/>
+          <line x1="13" y1="70" x2="13" y2="18" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
+          <polygon points="13,6 6,20 20,20" fill="#1f2937"/>
+        </svg>
 
         <!-- attribute nodes (green, blurred, floating) -->
         <span class="kg-node attr floaty" data-attr="fabric"  style="--dur:5.5s; left:64%; top:24%; width:9%; aspect-ratio:1; font-size:14px;">fabric</span>
@@ -442,20 +437,15 @@
     <!-- ===== Property editor (interactive) ===== -->
     <div class="mt-12">
       <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Property editor.</h3>
-      <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Pick a segment of the sofa &mdash; the region highlights and its typed properties (<span class="font-mono text-[13px]">is-a</span>, <span class="font-mono text-[13px]">made-of</span>, <span class="font-mono text-[13px]">is-style-of</span>&hellip;) appear, ready to edit.</p>
+      <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Pick a segment of the sofa &mdash; its typed properties (<span class="font-mono text-[13px]">is-a</span>, <span class="font-mono text-[13px]">made-of</span>, <span class="font-mono text-[13px]">is-style-of</span>&hellip;) appear, ready to edit.</p>
 
       <div class="interactive-zone p-5 md:p-7 pt-8 md:pt-9">
         <span class="interactive-badge"><span class="dot"></span> Pick a segment</span>
         <div class="grid md:grid-cols-12 gap-6 items-start">
-          <!-- LEFT: real sofa image with highlightable segment hotspots -->
+          <!-- LEFT: real sofa image -->
           <div class="md:col-span-6 bg-gray-50 border border-gray-200 rounded-2xl p-4">
-            <div class="pe-stage w-full mx-auto" style="max-width:340px;">
+            <div class="w-full mx-auto" style="max-width:340px;">
               <img src="./img/pe_sofa.png" alt="Source sofa" class="w-full block rounded-lg" />
-              <!-- hotspots positioned as % over the image (326x302 source) -->
-              <button class="pe-hotspot" data-part="backrest" title="backrest" style="left:12.3%; top:31.5%; width:64.4%; height:23.2%;"></button>
-              <button class="pe-hotspot" data-part="cushion"  title="cushion"  style="left:72%;   top:44.7%; width:13%;   height:14%; border-radius:9999px;"></button>
-              <button class="pe-hotspot" data-part="seat"     title="seat"     style="left:16.9%; top:51.3%; width:59.8%; height:13.5%;"></button>
-              <button class="pe-hotspot" data-part="support"  title="support"  style="left:13.8%; top:64.6%; width:73.6%; height:10.5%;"></button>
             </div>
           </div>
 
@@ -844,14 +834,10 @@
       var segTabs  = document.getElementById('seg-tabs');
       var segTitle = document.getElementById('seg-title');
       var segProps = document.getElementById('seg-props');
-      var hotspots = document.querySelectorAll('.pe-hotspot');
       function showSegment(part) {
         var seg = SEGMENTS[part]; if (!seg) return;
         if (segTabs) segTabs.querySelectorAll('.seg-tab').forEach(function (b) {
           b.classList.toggle('is-active', b.getAttribute('data-part') === part);
-        });
-        hotspots.forEach(function (p) {
-          p.classList.toggle('is-active', p.getAttribute('data-part') === part);
         });
         segTitle.textContent = seg.title;
         segProps.innerHTML = seg.props.map(function (r) {
@@ -863,9 +849,6 @@
       if (segTabs) {
         segTabs.querySelectorAll('.seg-tab').forEach(function (b) {
           b.addEventListener('click', function () { showSegment(b.getAttribute('data-part')); });
-        });
-        hotspots.forEach(function (p) {
-          p.addEventListener('click', function () { showSegment(p.getAttribute('data-part')); });
         });
         showSegment('seat');
       }
