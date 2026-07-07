@@ -167,6 +167,24 @@
     /* Property-editor segment tabs */
     .seg-tab { cursor: pointer; transition: all 120ms ease; }
     .seg-tab.is-active { background: #9e6606; border-color: #9e6606; color: #fff; }
+
+    /* Property-editor: clickable sofa segments */
+    .pe-stage { position: relative; }
+    .pe-overlay {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: contain; pointer-events: none;
+      opacity: 0; transition: opacity 140ms ease;
+    }
+    .pe-overlay.is-shown { opacity: 1; }
+    .pe-hit {
+      position: absolute; cursor: pointer; background: transparent;
+      border: 0; padding: 0; border-radius: 8px;
+    }
+    .pe-hit:hover { background: rgba(37,99,235,0.10); }
+
+    /* Property pills: click to toggle-select */
+    .pe-prop { cursor: pointer; transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease; }
+    .pe-prop.is-selected { background: #9e6606; color: #fff; box-shadow: 0 2px 8px -2px rgba(111,65,17,0.5); }
   </style>
 </head>
 
@@ -435,15 +453,25 @@
     <!-- ===== Property editor (interactive) ===== -->
     <div class="mt-12">
       <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Property editor.</h3>
-      <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Pick a segment of the sofa &mdash; its typed properties (<span class="font-mono text-[13px]">is-a</span>, <span class="font-mono text-[13px]">made-of</span>, <span class="font-mono text-[13px]">is-style-of</span>&hellip;) appear, ready to edit.</p>
+      <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Click a segment on the sofa (or a tab) &mdash; it highlights and its typed properties (<span class="font-mono text-[13px]">is-a</span>, <span class="font-mono text-[13px]">made-of</span>, <span class="font-mono text-[13px]">is-style-of</span>&hellip;) appear. Click a property to select it.</p>
 
       <div class="interactive-zone p-5 md:p-7 pt-8 md:pt-9">
         <span class="interactive-badge"><span class="dot"></span> Pick a segment</span>
         <div class="grid md:grid-cols-12 gap-6 items-start">
-          <!-- LEFT: real sofa image -->
+          <!-- LEFT: real sofa image with clickable segments -->
           <div class="md:col-span-6 bg-gray-50 border border-gray-200 rounded-2xl p-4">
-            <div class="w-full mx-auto" style="max-width:340px;">
+            <div class="pe-stage w-full mx-auto" style="max-width:340px;">
               <img src="./img/pe_sofa.png" alt="Source sofa" class="w-full block rounded-lg" />
+              <!-- highlight overlays (aligned to the 326x302 source) -->
+              <img class="pe-overlay" data-part="backrest" src="./img/seg/backrest.png" alt="" />
+              <img class="pe-overlay" data-part="cushion"  src="./img/seg/cushion.png"  alt="" />
+              <img class="pe-overlay" data-part="seat"     src="./img/seg/seat.png"     alt="" />
+              <img class="pe-overlay" data-part="support"  src="./img/seg/support.png"  alt="" />
+              <!-- transparent click zones -->
+              <button class="pe-hit" data-part="backrest" aria-label="backrest" style="left:12.3%; top:37.1%; width:47.9%; height:11.9%;"></button>
+              <button class="pe-hit" data-part="cushion"  aria-label="cushion"  style="left:78.5%; top:49.7%; width:9%;    height:9%;"></button>
+              <button class="pe-hit" data-part="seat"     aria-label="seat"     style="left:13.8%; top:55.0%; width:48.2%; height:7.9%;"></button>
+              <button class="pe-hit" data-part="support"  aria-label="support"  style="left:14.7%; top:67.9%; width:49.1%; height:6%;"></button>
             </div>
           </div>
 
@@ -829,24 +857,39 @@
         support:  { title: 'support',  props: [['is a','support'],['made of','wood'],['has property','rectangular'],['has property','brown'],['is style of','modern']] },
         backrest: { title: 'backrest', props: [['is a','backrest'],['has property','beige'],['made of','fabric'],['has property','curved'],['is style of','sleek']] },
       };
-      var segTabs  = document.getElementById('seg-tabs');
-      var segTitle = document.getElementById('seg-title');
-      var segProps = document.getElementById('seg-props');
+      var segTabs   = document.getElementById('seg-tabs');
+      var segTitle  = document.getElementById('seg-title');
+      var segProps  = document.getElementById('seg-props');
+      var peStage   = document.querySelector('.pe-stage');
+      var peOverlays = document.querySelectorAll('.pe-overlay');
+      var peHits    = document.querySelectorAll('.pe-hit');
+
       function showSegment(part) {
         var seg = SEGMENTS[part]; if (!seg) return;
         if (segTabs) segTabs.querySelectorAll('.seg-tab').forEach(function (b) {
           b.classList.toggle('is-active', b.getAttribute('data-part') === part);
         });
+        // sofa highlight overlay
+        peOverlays.forEach(function (o) {
+          o.classList.toggle('is-shown', o.getAttribute('data-part') === part);
+        });
         segTitle.textContent = seg.title;
         segProps.innerHTML = seg.props.map(function (r) {
           return '<div class="flex items-center gap-3">' +
             '<dt class="text-gray-400 text-[12px] min-w-[86px]">' + r[0] + '</dt>' +
-            '<dd class="px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 text-[12.5px] font-medium">' + r[1] + '</dd></div>';
+            '<dd class="pe-prop px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 text-[12.5px] font-medium">' + r[1] + '</dd></div>';
         }).join('');
+        // property pills: click to toggle-select
+        segProps.querySelectorAll('.pe-prop').forEach(function (pill) {
+          pill.addEventListener('click', function () { pill.classList.toggle('is-selected'); });
+        });
       }
       if (segTabs) {
         segTabs.querySelectorAll('.seg-tab').forEach(function (b) {
           b.addEventListener('click', function () { showSegment(b.getAttribute('data-part')); });
+        });
+        peHits.forEach(function (h) {
+          h.addEventListener('click', function () { showSegment(h.getAttribute('data-part')); });
         });
         showSegment('seat');
       }
