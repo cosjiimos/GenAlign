@@ -87,6 +87,54 @@
 
     /* Figure zoom-on-click cursor hint */
     .zoomable { cursor: zoom-in; }
+
+    /* Interactive playground: a distinct, self-evidently "try me" region. */
+    .interactive-zone {
+      position: relative;
+      background:
+        radial-gradient(120% 120% at 0% 0%, rgba(245,197,24,0.06), transparent 60%),
+        #fffdf5;
+      border: 1.5px dashed rgb(250 214 71);
+      border-radius: 1.25rem;
+    }
+    .interactive-badge {
+      position: absolute;
+      top: -0.7rem;
+      left: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.7rem;
+      background: #9e6606;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 9999px;
+      box-shadow: 0 4px 12px -4px rgba(111,65,17,0.5);
+    }
+    .interactive-badge .dot {
+      width: 6px; height: 6px; border-radius: 9999px; background: #fff;
+      animation: livepulse 1.8s ease-in-out infinite;
+    }
+    @keyframes livepulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+    /* VKG mini-graph */
+    .kg-style { cursor: pointer; transition: transform 140ms ease, filter 140ms ease; }
+    .kg-style:hover, .kg-style.is-active { transform: scale(1.06); }
+    .kg-node-attr, .kg-edge { transition: opacity 160ms ease, stroke 160ms ease; }
+    .kg-graph.has-active .kg-node-attr:not(.is-lit),
+    .kg-graph.has-active .kg-edge:not(.is-lit),
+    .kg-graph.has-active .kg-style:not(.is-active):not(.is-lit) { opacity: 0.18; }
+    .kg-node-attr.is-lit .attr-pill { fill: #fdf3c4; stroke: #e5ac06; }
+    .kg-edge.is-lit { stroke: #c68a03; stroke-width: 2; }
+
+    /* Property-editor segment tabs & sofa hotspots */
+    .seg-tab { cursor: pointer; transition: all 120ms ease; }
+    .seg-tab.is-active { background: #9e6606; border-color: #9e6606; color: #fff; }
+    .sofa-part { transition: opacity 140ms ease; opacity: 0; }
+    .sofa-part.is-shown { opacity: 1; }
   </style>
 </head>
 
@@ -284,17 +332,114 @@
   <section class="max-w-6xl mx-auto px-6 py-14">
     <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">The interface</p>
     <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Visual Knowledge Graph interface.</h2>
-    <p class="text-gray-500 text-[15px] mb-8 max-w-2xl">Inspect the extracted graph and its typed relations directly over the source image.</p>
-    <figure>
-      <img src="./img/fig_5.png" alt="Interactive Visual Knowledge Graph interface" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
-    </figure>
+    <p class="text-gray-500 text-[15px] mb-8 max-w-2xl">The extracted graph puts <b>style concepts</b> (large nodes) and the concrete <b>properties</b> (small nodes) that realize them in one view. Hover a style node to light up the properties bound to it.</p>
 
+    <div class="interactive-zone p-5 md:p-7 pt-8 md:pt-9">
+      <span class="interactive-badge"><span class="dot"></span> Hover a style node</span>
+
+      <!-- toolbar mimic -->
+      <div class="flex flex-wrap items-center gap-2 mb-4">
+        <span class="px-3 py-1 rounded-lg bg-accent-600 text-white text-[12px] font-medium">Full</span>
+        <span class="px-3 py-1 rounded-lg border border-gray-300 text-gray-500 text-[12px]">Saved Properties</span>
+        <span class="mx-1 w-px h-4 bg-gray-200"></span>
+        <span class="px-2.5 py-0.5 rounded-full bg-accent-100 text-accent-800 text-[11.5px] font-mono">minimalist</span>
+        <span class="px-2.5 py-0.5 rounded-full bg-accent-100 text-accent-800 text-[11.5px] font-mono">sleek</span>
+        <span class="px-2.5 py-0.5 rounded-full bg-accent-100 text-accent-800 text-[11.5px] font-mono">modern</span>
+        <span class="px-2.5 py-0.5 rounded-full bg-accent-100 text-accent-800 text-[11.5px] font-mono">classic</span>
+      </div>
+
+      <div class="rounded-xl bg-white border border-gray-200 overflow-hidden">
+        <svg id="kg-graph" class="kg-graph w-full block" viewBox="0 0 720 380" role="img" aria-label="Interactive Visual Knowledge Graph">
+          <!-- edges: data-style ties an edge to its style node -->
+          <g stroke="#d1d5db" stroke-width="1.2" fill="none">
+            <line class="kg-edge" data-style="minimalist" x1="235" y1="205" x2="120" y2="120"/>
+            <line class="kg-edge" data-style="minimalist" x1="235" y1="205" x2="150" y2="255"/>
+            <line class="kg-edge" data-style="minimalist" x1="235" y1="205" x2="255" y2="110"/>
+            <line class="kg-edge" data-style="minimalist" x1="235" y1="205" x2="360" y2="185"/>
+            <line class="kg-edge" data-style="minimalist" x1="235" y1="205" x2="110" y2="320"/>
+            <line class="kg-edge" data-style="sleek" x1="420" y1="110" x2="300" y2="140"/>
+            <line class="kg-edge" data-style="sleek" x1="420" y1="110" x2="520" y2="150"/>
+            <line class="kg-edge" data-style="modern" x1="500" y1="255" x2="360" y2="185"/>
+            <line class="kg-edge" data-style="modern" x1="500" y1="255" x2="400" y2="235"/>
+            <line class="kg-edge" data-style="modern" x1="500" y1="255" x2="560" y2="200"/>
+            <line class="kg-edge" data-style="modern" x1="500" y1="255" x2="520" y2="150"/>
+            <line class="kg-edge" data-style="modern" x1="500" y1="255" x2="600" y2="300"/>
+            <line class="kg-edge" data-style="classic" x1="70" y1="330" x2="150" y2="255"/>
+          </g>
+
+          <!-- attribute (property) nodes -->
+          <g font-family="Inter, sans-serif" font-size="11" fill="#4b5563" text-anchor="middle">
+            <g class="kg-node-attr" data-attr="beige"><circle class="attr-pill" cx="120" cy="120" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="120" y="103">beige</text></g>
+            <g class="kg-node-attr" data-attr="curved"><circle class="attr-pill" cx="150" cy="255" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="150" y="280">curved</text></g>
+            <g class="kg-node-attr" data-attr="round"><circle class="attr-pill" cx="255" cy="110" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="255" y="93">round</text></g>
+            <g class="kg-node-attr" data-attr="brown"><circle class="attr-pill" cx="360" cy="185" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="360" y="168">brown</text></g>
+            <g class="kg-node-attr" data-attr="cushion"><circle class="attr-pill" cx="400" cy="235" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="400" y="260">cushion</text></g>
+            <g class="kg-node-attr" data-attr="wood"><circle class="attr-pill" cx="300" cy="140" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="300" y="123">wood</text></g>
+            <g class="kg-node-attr" data-attr="rectangular"><circle class="attr-pill" cx="520" cy="150" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="520" y="133">rect.</text></g>
+            <g class="kg-node-attr" data-attr="fabric"><circle class="attr-pill" cx="110" cy="320" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="110" y="345">fabric</text></g>
+            <g class="kg-node-attr" data-attr="marble"><circle class="attr-pill" cx="600" cy="300" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="600" y="325">marble</text></g>
+            <g class="kg-node-attr" data-attr="metal"><circle class="attr-pill" cx="560" cy="200" r="15" fill="#fef9c3" stroke="#eab308" stroke-width="1"/><text x="560" y="183">metal</text></g>
+          </g>
+
+          <!-- style (concept) nodes -->
+          <g font-family="Inter, sans-serif" font-weight="700" text-anchor="middle">
+            <g class="kg-style" data-style="minimalist"><circle cx="235" cy="205" r="38" fill="#8b7cc4" opacity="0.85"/><text x="235" y="209" font-size="13" fill="#fff">minimalist</text></g>
+            <g class="kg-style" data-style="sleek"><circle cx="420" cy="110" r="32" fill="#8b7cc4" opacity="0.85"/><text x="420" y="114" font-size="13" fill="#fff">sleek</text></g>
+            <g class="kg-style" data-style="modern"><circle cx="500" cy="255" r="38" fill="#8b7cc4" opacity="0.85"/><text x="500" y="259" font-size="13" fill="#fff">modern</text></g>
+            <g class="kg-style" data-style="classic"><circle cx="70" cy="330" r="30" fill="#8b7cc4" opacity="0.85"/><text x="70" y="334" font-size="12" fill="#fff">classic</text></g>
+          </g>
+        </svg>
+      </div>
+      <p class="text-[11px] text-gray-400 italic mt-2">Hover <b>minimalist</b>, <b>sleek</b>, <b>modern</b>, or <b>classic</b> &rarr; the properties bound to that style light up, the rest fade.</p>
+    </div>
+
+    <!-- ===== Property editor (interactive) ===== -->
     <div class="mt-12">
       <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Property editor.</h3>
-      <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Edit any node&rsquo;s attributes and propagate the change through the design.</p>
-      <figure>
-        <img src="./img/fig_3.png" alt="Property editor interface" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
-      </figure>
+      <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Pick a segment of the sofa &mdash; the region highlights and its typed properties (<span class="font-mono text-[13px]">is-a</span>, <span class="font-mono text-[13px]">made-of</span>, <span class="font-mono text-[13px]">is-style-of</span>&hellip;) appear, ready to edit.</p>
+
+      <div class="interactive-zone p-5 md:p-7 pt-8 md:pt-9">
+        <span class="interactive-badge"><span class="dot"></span> Pick a segment</span>
+        <div class="grid md:grid-cols-12 gap-6 items-start">
+          <!-- LEFT: sofa with highlightable parts -->
+          <div class="md:col-span-6 bg-gray-50 border border-gray-200 rounded-2xl p-4">
+            <svg viewBox="0 0 320 200" class="w-full block" role="img" aria-label="Sofa with selectable segments">
+              <!-- base sofa (neutral) -->
+              <rect x="40" y="150" width="240" height="26" rx="6" fill="#b98a5e"/>
+              <rect x="40" y="80" width="240" height="78" rx="14" fill="#e7e2d8"/>
+              <rect x="36" y="70" width="40" height="90" rx="16" fill="#ddd7ca"/>
+              <circle cx="252" cy="96" r="20" fill="#ddd7ca"/>
+              <rect x="44" y="176" width="16" height="16" rx="3" fill="#8a6a45"/>
+              <rect x="260" y="176" width="16" height="16" rx="3" fill="#8a6a45"/>
+              <!-- highlight overlays (one per segment) -->
+              <rect class="sofa-part" data-part="seat"    x="70"  y="120" width="180" height="34" rx="8" fill="#3b82f6" fill-opacity="0.55" stroke="#2563eb" stroke-width="2"/>
+              <rect class="sofa-part" data-part="cushion" x="234" y="78"  width="40"  height="40" rx="16" fill="#3b82f6" fill-opacity="0.55" stroke="#2563eb" stroke-width="2"/>
+              <rect class="sofa-part" data-part="support" x="40"  y="150" width="240" height="26" rx="6" fill="#3b82f6" fill-opacity="0.5" stroke="#2563eb" stroke-width="2"/>
+              <rect class="sofa-part" data-part="backrest" x="40" y="70"  width="240" height="52" rx="12" fill="#3b82f6" fill-opacity="0.45" stroke="#2563eb" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <!-- RIGHT: segment tabs + property list -->
+          <div class="md:col-span-6">
+            <div class="flex flex-wrap gap-2 mb-4" id="seg-tabs">
+              <button class="seg-tab is-active text-[12.5px] px-3 py-1 rounded-full border border-gray-300 bg-white" data-part="seat">seat</button>
+              <button class="seg-tab text-[12.5px] px-3 py-1 rounded-full border border-gray-300 bg-white" data-part="cushion">cushion</button>
+              <button class="seg-tab text-[12.5px] px-3 py-1 rounded-full border border-gray-300 bg-white" data-part="support">support</button>
+              <button class="seg-tab text-[12.5px] px-3 py-1 rounded-full border border-gray-300 bg-white" data-part="backrest">backrest</button>
+            </div>
+            <div class="bg-white border border-accent-200 rounded-2xl p-5 shadow-sm">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-bold text-gray-900 text-lg" id="seg-title">seat</h4>
+                <span class="text-[11px] text-gray-400">Property Editor</span>
+              </div>
+              <dl class="space-y-2 text-[13.5px]" id="seg-props"></dl>
+              <div class="mt-4 text-center">
+                <span class="inline-block px-4 py-1.5 rounded-lg bg-accent-50 border border-accent-200 text-accent-800 text-[12.5px] font-medium">save this segment</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -367,39 +512,36 @@
           </div>
         </div>
       </div>
+
+      <!-- Pipeline in practice: extraction + HBI generation figures -->
+      <div class="mt-12 space-y-10">
+        <figure>
+          <figcaption class="mb-3">
+            <h3 class="text-lg md:text-xl font-bold text-gray-900">From image to Visual Knowledge Graph.</h3>
+            <p class="text-gray-500 text-[14px] max-w-2xl">The full extraction process &mdash; from segmented parts to a densified graph of typed relations.</p>
+          </figcaption>
+          <img src="./img/fig_7.png" alt="Visual Knowledge Graph extraction process" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+        </figure>
+        <figure>
+          <figcaption class="mb-3">
+            <h3 class="text-lg md:text-xl font-bold text-gray-900">From graph to image: History-Based Injection.</h3>
+            <p class="text-gray-500 text-[14px] max-w-2xl">Property-grounded generation and editing, driven by the accumulated knowledge graph &mdash; only the most relevant bindings are injected into the generator.</p>
+          </figcaption>
+          <img src="./img/fig_hbi.png" alt="HBI-based extraction and image generation" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+        </figure>
+      </div>
     </div>
   </section>
 
   <!-- ============================== RESULTS ============================== -->
   <section id="results" class="section-anchor max-w-6xl mx-auto px-6 py-14">
     <p class="text-[10px] uppercase tracking-widest text-accent-700 font-semibold mb-2">Results</p>
-    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">Visual Knowledge Graph extraction &amp; generation.</h2>
+    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Generated &amp; edited designs across domains.</h2>
+    <p class="text-gray-500 text-[15px] mb-8 max-w-2xl">Designs produced by transferring and modifying graph properties &mdash; furniture, posters, characters, footwear, and interiors.</p>
 
-    <div class="space-y-14">
-      <div>
-        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Visual Knowledge Graph extraction.</h3>
-        <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">The full extraction process, from segmented parts to a densified graph of typed relations.</p>
-        <figure>
-          <img src="./img/fig_7.png" alt="Visual Knowledge Graph extraction process" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
-        </figure>
-      </div>
-
-      <div>
-        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">HBI extraction and image generation.</h3>
-        <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Property-grounded generation and editing driven by the extracted knowledge graph.</p>
-        <figure>
-          <img src="./img/fig_hbi.png" alt="HBI-based extraction and image generation" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
-        </figure>
-      </div>
-
-      <div>
-        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Example results.</h3>
-        <p class="text-gray-500 text-[15px] mb-6 max-w-2xl">Generated and edited designs produced by transferring and modifying graph properties.</p>
-        <figure>
-          <img src="./img/fig_A2.png" alt="Generation results" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
-        </figure>
-      </div>
-    </div>
+    <figure class="mb-2">
+      <img src="./img/fig_A2.png" alt="Generation results across multiple domains" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
+    </figure>
 
     <!-- HBI efficiency -->
     <div class="mt-14 bg-accent-50/60 border border-accent-200 rounded-2xl p-6 md:p-7">
@@ -614,6 +756,83 @@
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeLightbox();
       });
+
+      // ====== VKG mini-graph: hover a style node -> light its bound properties ======
+      var graph = document.getElementById('kg-graph');
+      if (graph) {
+        // which attributes belong to each style (matches the drawn edges)
+        var STYLE_ATTRS = {
+          minimalist: ['beige', 'curved', 'round', 'brown', 'fabric'],
+          sleek:      ['wood', 'rectangular'],
+          modern:     ['brown', 'cushion', 'metal', 'rectangular', 'marble'],
+          classic:    ['curved'],
+        };
+        function clearGraph() {
+          graph.classList.remove('has-active');
+          graph.querySelectorAll('.is-lit, .is-active').forEach(function (el) {
+            el.classList.remove('is-lit', 'is-active');
+          });
+        }
+        function litStyle(style) {
+          clearGraph();
+          graph.classList.add('has-active');
+          var styleEl = graph.querySelector('.kg-style[data-style="' + style + '"]');
+          if (styleEl) styleEl.classList.add('is-active');
+          graph.querySelectorAll('.kg-edge[data-style="' + style + '"]').forEach(function (e) {
+            e.classList.add('is-lit');
+          });
+          (STYLE_ATTRS[style] || []).forEach(function (a) {
+            var n = graph.querySelector('.kg-node-attr[data-attr="' + a + '"]');
+            if (n) n.classList.add('is-lit');
+          });
+        }
+        graph.querySelectorAll('.kg-style').forEach(function (el) {
+          var style = el.getAttribute('data-style');
+          el.addEventListener('mouseenter', function () { litStyle(style); });
+          el.addEventListener('click', function () { litStyle(style); });
+        });
+        graph.addEventListener('mouseleave', clearGraph);
+      }
+
+      // ====== Property editor: pick a segment -> highlight part + show props ======
+      var SEGMENTS = {
+        seat:     { title: 'seat',     props: [['is a','seat'],['has property','beige'],['made of','fabric'],['used for','sitting'],['is style of','minimalist'],['is style of','modern']] },
+        cushion:  { title: 'cushion',  props: [['is a','cushion'],['has property','round'],['made of','fabric'],['has property','soft'],['is style of','minimalist']] },
+        support:  { title: 'support',  props: [['is a','support'],['made of','wood'],['has property','rectangular'],['has property','brown'],['is style of','modern']] },
+        backrest: { title: 'backrest', props: [['is a','backrest'],['has property','beige'],['made of','fabric'],['has property','curved'],['is style of','sleek']] },
+      };
+      var segTabs  = document.getElementById('seg-tabs');
+      var segTitle = document.getElementById('seg-title');
+      var segProps = document.getElementById('seg-props');
+      var sofaParts = document.querySelectorAll('.sofa-part');
+      function showSegment(part) {
+        var seg = SEGMENTS[part]; if (!seg) return;
+        // tab active state
+        if (segTabs) segTabs.querySelectorAll('.seg-tab').forEach(function (b) {
+          b.classList.toggle('is-active', b.getAttribute('data-part') === part);
+        });
+        // sofa highlight
+        sofaParts.forEach(function (p) {
+          p.classList.toggle('is-shown', p.getAttribute('data-part') === part);
+        });
+        // property list
+        segTitle.textContent = seg.title;
+        segProps.innerHTML = seg.props.map(function (r) {
+          return '<div class="flex items-center gap-3">' +
+            '<dt class="text-gray-400 text-[12px] min-w-[86px]">' + r[0] + '</dt>' +
+            '<dd class="px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 text-[12.5px] font-medium">' + r[1] + '</dd></div>';
+        }).join('');
+      }
+      if (segTabs) {
+        segTabs.querySelectorAll('.seg-tab').forEach(function (b) {
+          b.addEventListener('click', function () { showSegment(b.getAttribute('data-part')); });
+        });
+        sofaParts.forEach(function (p) {
+          p.style.cursor = 'pointer';
+          p.addEventListener('click', function () { showSegment(p.getAttribute('data-part')); });
+        });
+        showSegment('seat');
+      }
     });
   </script>
 
