@@ -305,41 +305,62 @@
       <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Five stages, from pixels to knowledge graph.</h2>
       <p class="text-gray-500 text-[15px] mb-8 max-w-2xl">Each stage refines the semantic representation &mdash; segmentation, labeling, attribute extraction, triple construction, and post-processing.</p>
 
-      <figure class="mb-10">
-        <img src="./img/fig_A1.png" alt="GenAlign technical pipeline" class="w-full block rounded-xl border border-gray-200 bg-white zoomable" />
-      </figure>
-
       <div class="space-y-4">
         <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">1</div>
+          <div class="flex-shrink-0 flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[13px]">1</span>
+            <span class="w-10 h-10 rounded-xl bg-accent-100 text-accent-700 flex items-center justify-center" title="Semantic-SAM segmentation">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"/></svg>
+            </span>
+          </div>
           <div>
             <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Segmentation</h4>
             <p class="text-[13.5px] text-gray-600 leading-relaxed">Multi-granularity part extraction using Semantic-SAM, producing hierarchical masks with object/part labels (e.g., <code class="inline">sofa-armrest</code>, <code class="inline">table-leg</code>).</p>
           </div>
         </div>
         <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">2</div>
+          <div class="flex-shrink-0 flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[13px]">2</span>
+            <span class="w-10 h-10 rounded-xl bg-accent-100 text-accent-700 flex items-center justify-center" title="GPT-4o Vision labeling">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z"/></svg>
+            </span>
+          </div>
           <div>
             <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Segment Labeling</h4>
             <p class="text-[13.5px] text-gray-600 leading-relaxed">GPT-4o Vision analyzes each segment to assign semantic labels, understanding both the part identity and its role within the overall object.</p>
           </div>
         </div>
         <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">3</div>
+          <div class="flex-shrink-0 flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[13px]">3</span>
+            <span class="w-10 h-10 rounded-xl bg-accent-100 text-accent-700 flex items-center justify-center" title="Material, color, texture, shape">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+            </span>
+          </div>
           <div>
             <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Visual Attribute Extraction</h4>
             <p class="text-[13.5px] text-gray-600 leading-relaxed">Extract fine-grained properties including material (wood, metal, fabric), color, texture, shape characteristics, and functional attributes.</p>
           </div>
         </div>
         <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">4</div>
+          <div class="flex-shrink-0 flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[13px]">4</span>
+            <span class="w-10 h-10 rounded-xl bg-accent-100 text-accent-700 flex items-center justify-center" title="VisualSem triples">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+            </span>
+          </div>
           <div>
             <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Triple Extraction</h4>
             <p class="text-[13.5px] text-gray-600 leading-relaxed">Build structured knowledge graph triples following VisualSem ontology: <code class="inline">is-a</code>, <code class="inline">part-of</code>, <code class="inline">made-of</code>, <code class="inline">has-property</code>, <code class="inline">is-style-of</code>, and more.</p>
           </div>
         </div>
         <div class="pipeline-step bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[14px]">5</div>
+          <div class="flex-shrink-0 flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-[13px]">5</span>
+            <span class="w-10 h-10 rounded-xl bg-accent-100 text-accent-700 flex items-center justify-center" title="Normalize & save VKG logs">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+            </span>
+          </div>
           <div>
             <h4 class="font-semibold text-gray-900 text-[16px] mb-1">Post-Processing</h4>
             <p class="text-[13.5px] text-gray-600 leading-relaxed">Normalize properties, inject into the cognitive graph, and save VKG logs for analysis and generation tasks.</p>
