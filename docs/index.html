@@ -145,9 +145,13 @@
     .kg-node.img { border: 3px solid #fff; box-shadow: 0 6px 20px -8px rgba(0,0,0,0.35); background:#fff center/cover no-repeat; }
     .kg-node.img::before { display:none; }
 
-    /* gentle continuous drift */
-    @keyframes kgfloat { 0%,100% { transform: translate(-50%,-50%); } 50% { transform: translate(-50%, calc(-50% - 8px)); } }
-    .kg-node.floaty { animation: kgfloat var(--dur,6s) ease-in-out infinite; animation-delay: var(--delay,0s); }
+    /* gentle continuous drift — applied only to the blurred blob (::before),
+       so the node's own hit-box stays put and is always easy to hover/click. */
+    @keyframes kgfloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    .kg-node.floaty::before { animation: kgfloat var(--dur,6s) ease-in-out infinite; animation-delay: var(--delay,0s); }
+    /* image thumbnails: drift the whole node (no blob); they aren't click targets */
+    @keyframes kgfloatimg { 0%,100% { transform: translate(-50%,-50%); } 50% { transform: translate(-50%, calc(-50% - 7px)); } }
+    .kg-node.img.floaty { animation: kgfloatimg var(--dur,6s) ease-in-out infinite; animation-delay: var(--delay,0s); }
 
     .kg-wrap.has-active .kg-node.attr:not(.is-lit),
     .kg-wrap.has-active .kg-node.img:not(.is-lit),
@@ -412,12 +416,6 @@
         <!-- style nodes (purple, blurred, floating) -->
         <span class="kg-node style floaty" data-style="minimal" style="--dur:6s; left:47%; top:46%; width:11%; aspect-ratio:1; font-size:15px;">minimal</span>
         <span class="kg-node style floaty" data-style="playful" style="--dur:6.5s; --delay:.4s; left:47%; top:72%; width:11%; aspect-ratio:1; font-size:15px;">playful</span>
-        <!-- arrow between the two styles (transfer): playful -> minimal -->
-        <svg class="absolute" style="left:47%; top:53%; transform:translateX(-50%); width:26px; height:78px; pointer-events:none;" viewBox="0 0 26 78" preserveAspectRatio="xMidYMid meet">
-          <circle cx="13" cy="70" r="5.5" fill="#1f2937"/>
-          <line x1="13" y1="70" x2="13" y2="18" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
-          <polygon points="13,6 6,20 20,20" fill="#1f2937"/>
-        </svg>
 
         <!-- attribute nodes (green, blurred, floating) -->
         <span class="kg-node attr floaty" data-attr="fabric"  style="--dur:5.5s; left:64%; top:24%; width:9%; aspect-ratio:1; font-size:14px;">fabric</span>
@@ -431,7 +429,7 @@
         <span class="kg-node img floaty" data-thumb="minimal" style="--dur:6.1s; --delay:.5s; left:90%; top:54%; width:10%; aspect-ratio:1; background-image:url('./img/kg_thumb_green.png');"></span>
         <span class="kg-node img floaty" data-thumb="playful" style="--dur:5.9s; --delay:.3s; left:90%; top:86%; width:10%; aspect-ratio:1; background-image:url('./img/kg_thumb_yellow.png');"></span>
       </div>
-      <p class="text-[11px] text-gray-400 italic mt-2">Hover <b>minimal</b> or <b>playful</b> &rarr; the properties bound to that style (and the images realizing them) light up; the arrow shows <em>injecting one attribute&rsquo;s properties into the other</em> (transfer / edit).</p>
+      <p class="text-[11px] text-gray-400 italic mt-2">Hover <b>minimal</b> or <b>playful</b> &rarr; the properties bound to that style &mdash; and the images realizing them &mdash; light up, while the rest fade.</p>
     </div>
 
     <!-- ===== Property editor (interactive) ===== -->
